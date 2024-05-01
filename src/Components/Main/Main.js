@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useStudentContext } from '../../context/StudentContext';
-import AddStudentForm from '../AddStudentForm/AddStudentForm';
-import Modal from '../Modal/Modal';
-import './Main.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import AddStudentForm from "../AddStudentForm/AddStudentForm";
+import Modal from "../Modal/Modal";
+import "./Main.css";
 
 const Main = () => {
-  const { students, addStudent, deleteStudent } = useStudentContext();
+  const [students, setStudents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
 
@@ -16,10 +15,12 @@ const Main = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://crudcrud.com/api/1c27fac3cd464dfda23b917dbf676002/student');
-      addStudent(response.data);
+      const response = await axios.get(
+        "https://crudcrud.com/api/eeed7e2c2dd14eea9a4d114a0e908a83/student"
+      );
+      setStudents(response.data);
     } catch (error) {
-      console.error('Error fetching students:', error);
+      console.error("Error fetching students:", error);
     }
   };
 
@@ -35,10 +36,12 @@ const Main = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://crudcrud.com/api/76a9206f4d1446be9ce2357c858a7ebc/student/${id}`);
-      deleteStudent(id);
+      await axios.delete(
+        `https://crudcrud.com/api/eeed7e2c2dd14eea9a4d114a0e908a83/student/${id}`
+      );
+      setStudents(students.filter((student) => student._id !== id));
     } catch (error) {
-      console.error('Error deleting student:', error);
+      console.error("Error deleting student:", error);
     }
   };
 
@@ -49,11 +52,14 @@ const Main = () => {
 
   const handleAddStudent = async (newStudent) => {
     try {
-      const response = await axios.post('https://crudcrud.com/api/76a9206f4d1446be9ce2357c858a7ebc/student', newStudent);
-      addStudent(response.data);
+      const response = await axios.post(
+        "https://crudcrud.com/api/eeed7e2c2dd14eea9a4d114a0e908a83/student",
+        newStudent
+      );
+      setStudents([...students, response.data]);
       setShowModal(false);
     } catch (error) {
-      console.error('Error adding student:', error);
+      console.error("Error adding student:", error);
     }
   };
 
@@ -71,32 +77,17 @@ const Main = () => {
           />
         </Modal>
       )}
-      {students.length > 1 && (
-        <ul>
-          {students.map((student) => (
-            <li key={student._id}>
-              {student.name} - {student.phoneNumber} - {student.address}
-              <div>
-                <button onClick={() => handleDelete(student._id)}>Delete</button>
-                <button onClick={() => handleEdit(student)}>Edit</button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-       {/* {students.length > 1 && (
-        <ul>
-          {students.map((student) => (
-            <li key={student._id}>
-              {student.name} - {student.phoneNumber} - {student.address}
-              <div>
-                <button onClick={() => handleDelete(student._id)}>Delete</button>
-                <button onClick={() => handleEdit(student)}>Edit</button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )} */}
+      <ul>
+        {students.map((student) => (
+          <li key={student._id}>
+            {student.name} - {student.phoneNumber} - {student.address}
+            <div>
+              <button onClick={() => handleDelete(student._id)}>Delete</button>
+              <button onClick={() => handleEdit(student)}>Edit</button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './AddStudentForm.css';
+import React, { useState } from "react";
+import axios from "axios";
+import "./AddStudentForm.css";
 
 const AddStudentForm = ({ onClose, selectedStudent, onAdd }) => {
-  const [name, setName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [address, setAddress] = useState('');
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newStudent = {
       name,
       phoneNumber,
-      address
+      address,
     };
 
     try {
-      await axios.post('https://crudcrud.com/api/76a9206f4d1446be9ce2357c858a7ebc/student', newStudent);
+      // await axios.post(
+      //   "https://crudcrud.com/api/eeed7e2c2dd14eea9a4d114a0e908a83/student",
+      //   newStudent
+      // );
       onAdd(newStudent);
       onClose();
     } catch (error) {
-      console.error('Error adding student:', error);
+      console.error("Error adding student:", error);
     }
   };
 
@@ -54,8 +57,10 @@ const AddStudentForm = ({ onClose, selectedStudent, onAdd }) => {
           />
           {/* <button type="submit">{selectedStudent ? 'Update' : 'Add'}</button>
           {selectedStudent && <button type="button" onClick={onClose}>Close</button>} */}
-          <button type="submit" >Add</button>
-          <button type="button" onClick={onClose}>Close</button>
+          <button type="submit">Add</button>
+          <button type="button" onClick={onClose}>
+            Close
+          </button>
         </form>
       </div>
     </div>
